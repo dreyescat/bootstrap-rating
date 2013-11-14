@@ -25,5 +25,19 @@ Any rating plugin is implicitly initialized if the *bootstrap-rating.js* is load
 
 Also it can be explicitly initialized just calling *.rating()* on the desired input:
 
-    $('input[type=text].rating').rating()
+    $('input').rating()
 
+### Changing the rating symbols
+
+The default rating symbols can be replaced with another ones. Just add the desired glyphicon for the filled and empty states:
+
+    <input type="text" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
+
+Check the [available glyphs](http://getbootstrap.com/components/#glyphicons-glyphs).
+
+Again, you can explicitly initialize the plugin passing the glyphicons as parameters:
+
+    $('input').rating({
+        filled: 'glyphicon-heart',
+        empty: 'glyphicon-heart-empty'
+    })
