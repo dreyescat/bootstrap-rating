@@ -2,7 +2,8 @@
   'use strict';
 
   $.fn.rating = function (options) {
-    return this.each(function () {
+    var $clones = $([]);
+    this.each(function () {
       var $this = $(this);
       var data = {
         filled: $this.data('filled'),
@@ -22,9 +23,12 @@
       // being thrown by Internet Explorer 6, 7, or 8.
       // 
       // The solution:
-      // Change the type to a cloned one. Clone with event handlers.
+      // Change the type to a cloned one (with event handlers included). Then
+      // replace the original one with the cloned one.
       var $input = $this.clone(true).prop('type', 'hidden');
-      $rating.append($input);
+      $this.replaceWith($input);
+      // Add the clone into the list of DOM objects to be returned.
+      $clones.push($input[0]);
 
       $rating
         .on('click', '.rating-symbol', function () {
@@ -38,10 +42,10 @@
           // Set input to the current value (0-based) and 'trigger' the 
           // change handler.
           $input.val($this.index()).change();
-        });
-
-      $this.replaceWith($rating);
+        }).insertBefore($input);
     });
+
+    return $clones;
   };
 
   // Plugin defaults.

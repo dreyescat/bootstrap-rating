@@ -16,8 +16,15 @@
       <input type="text" class="rating"/>
       <h3>Customized heart rating</h3>
       <input type="text" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
+      <h3>Handle events</h3>
+      <input type="text" class="check" data-filled="glyphicon-check" data-empty="glyphicon-unchecked"/>
     </div>
     <script type="text/javascript" src="dist/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="bootstrap-rating.js"></script>
+    <script>
+      var a = $('input.check').rating().on('change', function () {
+        alert('Rating: ' + $(this).val());
+      });
+    </script>
   </body>
 </html>
