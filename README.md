@@ -29,6 +29,24 @@ Also it can be explicitly initialized just calling *.rating()* on the desired in
 
     $('input').rating();
 
+### Behind the rating control
+
+Bootstrap Rating uses an input to keep the rating value. But the relationship between the *behind the scenes* input control and the rating control goes a little further. This input is the associated control. They are tied together.
+
+You can disable the rating control simply disabling its associated input control:
+
+    <input type="text" class="rating" disabled="disabled"/>
+
+Or make it read only:
+
+    <input type="text" class="rating" readonly="readonly"/>
+
+Or attach events:
+
+    $('input').on('change', function () {
+      alert('Rating: ' + $(this).val());
+    });
+
 ### Changing the rating symbols
 
 The default rating symbols can be replaced with another ones. Just add the desired glyphicon for the filled and empty states:

@@ -51,15 +51,17 @@
 
       $rating
         .on('click', '.rating-symbol', function () {
-          var $this = $(this);
-          // Fill rating until the selected one (selected one included).
-          $this.prevAll('.rating-symbol').addBack()
-            .removeClass(opts.empty).addClass(opts.filled);
-          // Empty rating from the selected one to the end.
-          $this.nextAll('.rating-symbol')
-            .removeClass(opts.filled).addClass(opts.empty);
-          // Set input to the current value and 'trigger' the change handler.
-          $input.val(opts.start + $this.index() * opts.step).change();
+          if (!$input.prop('disabled') && !$input.prop('readonly')) {
+            var $this = $(this);
+            // Fill rating until the selected one (selected one included).
+            $this.prevAll('.rating-symbol').addBack()
+              .removeClass(opts.empty).addClass(opts.filled);
+            // Empty rating from the selected one to the end.
+            $this.nextAll('.rating-symbol')
+              .removeClass(opts.filled).addClass(opts.empty);
+            // Set input to the current value and 'trigger' the change handler.
+            $input.val(opts.start + $this.index() * opts.step).change();
+          }
         }).insertBefore($input);
     });
 
