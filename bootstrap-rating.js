@@ -11,26 +11,29 @@
         filled: $this.data('filled'),
         empty: $this.data('empty'),
         start: $this.data('start'),
-        stop: $this.data('stop')
+        stop: $this.data('stop'),
+        step: $this.data('step')
       };
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
       var opts = $.extend({}, data, options);
-      // Sanitize start and stop rates.
-      // Both start and stop rate must be integers.
+      // Sanitize start, stop, and step.
+      // All of them start, stop, and step must be integers.
       // In case we don't have a valid stop rate try to get a reasonable
       // one based on the existence of a valid start rate.
       opts.start = parseInt(opts.start, 10) || undefined;
       opts.stop = parseInt(opts.stop, 10) ||
                      opts.start + OFFSET ||
                      undefined;
+      opts.step = parseInt(opts.step, 10) || undefined;
 
       // Extend/Override the default options with those provided either as
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
 
       var $rating = $('<div></div>');
-      for (var i = opts.start; i < opts.stop; i++) {
+      var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
+      for (var i = 0; i < length; i++) {
         $rating.append('<div class="rating-symbol glyphicon ' + opts.empty + '"></div>');
       }
       // From jQuery.fn.prop (http://api.jquery.com/prop/):
@@ -56,7 +59,7 @@
           $this.nextAll('.rating-symbol')
             .removeClass(opts.filled).addClass(opts.empty);
           // Set input to the current value and 'trigger' the change handler.
-          $input.val(opts.start + $this.index()).change();
+          $input.val(opts.start + $this.index() * opts.step).change();
         }).insertBefore($input);
     });
 
@@ -68,7 +71,8 @@
     filled: 'glyphicon-star',
     empty: 'glyphicon-star-empty',
     start: 0,
-    stop: OFFSET
+    stop: OFFSET,
+    step: 1
   };
 
   $(function () {

@@ -70,3 +70,27 @@ If what you need is to change the default start and stop values for all the rati
 
     $.fn.rating.defaults.start = 1;
     $.fn.rating.defaults.stop = 10;
+
+#### Stepping different
+
+The rating range spans all the integers from **start** to **stop**, incremented or decremented by a **step**. The default **step** is 1.
+
+Use **data-step** attribute to change the stepping:
+
+    <input type="text" class="rating" data-stop="10" data-step="2"/>
+
+Or the explicit initialization:
+
+    $('input').rating({
+      stop: 10,
+      step: 2
+    });
+
+Also, as usual, you can change the default **step** globally:
+
+    $.fn.rating.defaults.step = 2
+
+My Python background wouldn't forgive me not supporting negative stepping:
+
+    <input type="text" class="rating" data-stop="-10" data-step="-2"/>
+
