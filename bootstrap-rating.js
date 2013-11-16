@@ -1,5 +1,7 @@
-(function ($) {
+(function ($, undefined) {
   'use strict';
+
+  var OFFSET = 5;
 
   $.fn.rating = function (options) {
     var $clones = $([]);
@@ -7,14 +9,28 @@
       var $this = $(this);
       var data = {
         filled: $this.data('filled'),
-        empty: $this.data('empty')
+        empty: $this.data('empty'),
+        start: $this.data('start'),
+        stop: $this.data('stop')
       };
-      // Extend/Override the default options with those provided.
+      // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
-      var opts = $.extend({}, $.fn.rating.defaults, data, options);
+      var opts = $.extend({}, data, options);
+      // Sanitize start and stop rates.
+      // Both start and stop rate must be integers.
+      // In case we don't have a valid stop rate try to get a reasonable
+      // one based on the existence of a valid start rate.
+      opts.start = parseInt(opts.start, 10) || undefined;
+      opts.stop = parseInt(opts.stop, 10) ||
+                     opts.start + OFFSET ||
+                     undefined;
+
+      // Extend/Override the default options with those provided either as
+      // data attributes or function parameters.
+      opts = $.extend({}, $.fn.rating.defaults, opts);
 
       var $rating = $('<div></div>');
-      for (var i = 0; i < 5; i++) {
+      for (var i = opts.start; i < opts.stop; i++) {
         $rating.append('<div class="rating-symbol glyphicon ' + opts.empty + '"></div>');
       }
       // From jQuery.fn.prop (http://api.jquery.com/prop/):
@@ -39,9 +55,8 @@
           // Empty rating from the selected one to the end.
           $this.nextAll('.rating-symbol')
             .removeClass(opts.filled).addClass(opts.empty);
-          // Set input to the current value (0-based) and 'trigger' the 
-          // change handler.
-          $input.val($this.index()).change();
+          // Set input to the current value and 'trigger' the change handler.
+          $input.val(opts.start + $this.index()).change();
         }).insertBefore($input);
     });
 
@@ -51,7 +66,9 @@
   // Plugin defaults.
   $.fn.rating.defaults = {
     filled: 'glyphicon-star',
-    empty: 'glyphicon-star-empty'
+    empty: 'glyphicon-star-empty',
+    start: 0,
+    stop: OFFSET
   };
 
   $(function () {
