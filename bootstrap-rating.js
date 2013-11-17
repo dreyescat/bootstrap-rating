@@ -5,18 +5,35 @@
 
   $.fn.rating = function (options) {
     var $clones = $([]);
+
+    var fillUntil = function (rate, filled, empty) {
+      var $rate = $(rate);
+      // Fill rating until the selected one (selected one included).
+      $rate.prevAll('.rating-symbol').addBack()
+        .removeClass(empty).addClass(filled);
+      // Empty rating from the selected one to the end.
+      $rate.nextAll('.rating-symbol')
+        .removeClass(filled).addClass(empty);
+    };
+
+    var fillUntilRate = function ($rating, value, opts) {
+      var rate = parseInt(value, 10);
+       // Check the value is a valid rate according to the step.
+      if (!isNaN(rate) && rate % opts.step === 0) {
+        var $rates = $rating.children();
+        var index = Math.max(Math.ceil((rate - opts.start) / opts.step), 0);
+        // Check the index is between the proper range [0..length).
+        if (0 <= index && index < $rates.length) {
+          fillUntil($rates[index], opts.filled, opts.empty);
+        }
+      }
+    };
+
     this.each(function () {
       var $this = $(this);
-      var data = {
-        filled: $this.data('filled'),
-        empty: $this.data('empty'),
-        start: $this.data('start'),
-        stop: $this.data('stop'),
-        step: $this.data('step')
-      };
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
-      var opts = $.extend({}, data, options);
+      var opts = $.extend({}, $this.data(), options);
       // Sanitize start, stop, and step.
       // All of them start, stop, and step must be integers.
       // In case we don't have a valid stop rate try to get a reasonable
@@ -31,11 +48,6 @@
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
 
-      var $rating = $('<div></div>');
-      var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
-      for (var i = 0; i < length; i++) {
-        $rating.append('<div class="rating-symbol glyphicon ' + opts.empty + '"></div>');
-      }
       // From jQuery.fn.prop (http://api.jquery.com/prop/):
       // Attempting to change the type property (or attribute) of an input element
       // created via HTML or already in an HTML document will result in an error
@@ -49,20 +61,30 @@
       // Add the clone into the list of DOM objects to be returned.
       $clones.push($input[0]);
 
+      // Build the rating control.
+      var $rating = $('<div></div>').insertBefore($input);
+      var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
+      for (var i = 0; i < length; i++) {
+        $rating.append('<div class="rating-symbol glyphicon ' + opts.empty + '"></div>');
+      }
+      // Initialize the rating control with the associated input value.
+      fillUntilRate($rating, $input.val(), opts);
+
+      // Keep rating control and its associated input in sync.
+      $input
+        .on('change', function () {
+          fillUntilRate($rating, $(this).val(), opts);
+        });
+
       $rating
         .on('click', '.rating-symbol', function () {
           if (!$input.prop('disabled') && !$input.prop('readonly')) {
             var $this = $(this);
-            // Fill rating until the selected one (selected one included).
-            $this.prevAll('.rating-symbol').addBack()
-              .removeClass(opts.empty).addClass(opts.filled);
-            // Empty rating from the selected one to the end.
-            $this.nextAll('.rating-symbol')
-              .removeClass(opts.filled).addClass(opts.empty);
+            fillUntil(this, opts.filled, opts.empty);
             // Set input to the current value and 'trigger' the change handler.
             $input.val(opts.start + $this.index() * opts.step).change();
           }
-        }).insertBefore($input);
+        });
     });
 
     return $clones;

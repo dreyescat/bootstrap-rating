@@ -37,9 +37,13 @@ You can disable the rating control simply disabling its associated input control
 
     <input type="text" class="rating" disabled="disabled"/>
 
-Or make it read only:
+Make it read only:
 
     <input type="text" class="rating" readonly="readonly"/>
+
+Set its initial value:
+
+    <input type="text" class="rating" value="2"/>
 
 Or attach events:
 
