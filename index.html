@@ -13,32 +13,32 @@
       <h2>Bootstrap rating</h2>
       <hr/>
       <h3>Default rating</h3>
-      <input type="text" class="rating"/>
+      <input type="hidden" class="rating"/>
       <h3>Disabled rating</h3>
-      <input type="text" class="rating" disabled="disabled"/>
+      <input type="hidden" class="rating" disabled="disabled"/>
       <h3>Readonly rating</h3>
-      <input type="text" class="rating" readonly="readonly"/>
+      <input type="hidden" class="rating" readonly="readonly"/>
       <h3>Readonly rating with a value</h3>
-      <input type="text" class="rating" readonly="readonly" value="3"/>
+      <input type="hidden" class="rating" readonly="readonly" value="3"/>
       <h3>Customized heart rating</h3>
-      <input type="text" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
+      <input type="hidden" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
       <h3>Handle events</h3>
-      <input type="text" class="check" data-filled="glyphicon-check" data-empty="glyphicon-unchecked"/>
+      <input type="hidden" class="rating check" data-filled="glyphicon-check" data-empty="glyphicon-unchecked"/>
       <h3>Set stop rate to 10 [0..10)</h3>
-      <input type="text" class="rating check" data-stop="10"/>
+      <input type="hidden" class="rating check" data-stop="10"/>
       <h3>Set start rate to 5 [5..10)</h3>
-      <input type="text" class="rating check" data-start="5"/>
+      <input type="hidden" class="rating check" data-start="5"/>
       <h3>Set start and stop rate [1..10)</h3>
-      <input type="text" class="rating check" data-start="1" data-stop="10"/>
+      <input type="hidden" class="rating check" data-start="1" data-stop="10"/>
       <h3>Set start and stop rate [0..10) with step 2</h3>
-      <input type="text" class="rating check" data-stop="10" data-step="2"/>
+      <input type="hidden" class="rating check" data-stop="10" data-step="2"/>
       <h3>Set start and stop rate [0..-10) with step -2</h3>
-      <input type="text" class="rating check" data-stop="-10" data-step="-2"/>
+      <input type="hidden" class="rating check" data-stop="-10" data-step="-2"/>
     </div>
     <script type="text/javascript" src="dist/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="bootstrap-rating.js"></script>
     <script>
-      var a = $('input.check').rating().on('change', function () {
+      var a = $('input.check').on('change', function () {
         alert('Rating: ' + $(this).val());
       });
     </script>

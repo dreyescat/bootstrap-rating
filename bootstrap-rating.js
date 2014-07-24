@@ -4,8 +4,6 @@
   var OFFSET = 5;
 
   $.fn.rating = function (options) {
-    var $clones = $([]);
-
     var fillUntil = function (rate, filled, empty) {
       var $rate = $(rate);
       // Fill rating until the selected one (selected one included).
@@ -30,10 +28,10 @@
     };
 
     this.each(function () {
-      var $this = $(this);
+      var $input = $(this);
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
-      var opts = $.extend({}, $this.data(), options);
+      var opts = $.extend({}, $input.data(), options);
       // Sanitize start, stop, and step.
       // All of them start, stop, and step must be integers.
       // In case we don't have a valid stop rate try to get a reasonable
@@ -47,19 +45,6 @@
       // Extend/Override the default options with those provided either as
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
-
-      // From jQuery.fn.prop (http://api.jquery.com/prop/):
-      // Attempting to change the type property (or attribute) of an input element
-      // created via HTML or already in an HTML document will result in an error
-      // being thrown by Internet Explorer 6, 7, or 8.
-      // 
-      // The solution:
-      // Change the type to a cloned one (with event handlers included). Then
-      // replace the original one with the cloned one.
-      var $input = $this.clone(true).prop('type', 'hidden');
-      $this.replaceWith($input);
-      // Add the clone into the list of DOM objects to be returned.
-      $clones.push($input[0]);
 
       // Build the rating control.
       var $rating = $('<div></div>').insertBefore($input);
@@ -86,8 +71,6 @@
           }
         });
     });
-
-    return $clones;
   };
 
   // Plugin defaults.
@@ -100,6 +83,6 @@
   };
 
   $(function () {
-    $('input[type=text].rating').rating();
+    $('input.rating').rating();
   });
 }(jQuery));

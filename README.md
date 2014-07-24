@@ -14,14 +14,14 @@ Bootstrap Rating depends on [jQuery](http://jquery.com/) and Bootstrap for the r
 
 ## Usage
 
-Bootstrap Rating uses a text input to keep the rating value. This value corresponds to the 0-based index of the selected rating.
+Bootstrap Rating uses a hidden input to keep the rating value. This value corresponds to the 0-based index of the selected rating.
 
-    <input type="text" class="rating"/>
+    <input type="hidden" class="rating"/>
 
 Any rating plugin is implicitly initialized if the *bootstrap-rating.js* is loaded after the *rating* inputs:
 
     <body>
-      <input type="text" class="rating"/>
+      <input type="hidden" class="rating"/>
       <script type="text/javascript" src="bootstrap-rating.js"></script>
     </body>
 
@@ -35,15 +35,15 @@ Bootstrap Rating uses an input to keep the rating value. But the relationship be
 
 You can disable the rating control simply disabling its associated input control:
 
-    <input type="text" class="rating" disabled="disabled"/>
+    <input type="hidden" class="rating" disabled="disabled"/>
 
 Make it read only:
 
-    <input type="text" class="rating" readonly="readonly"/>
+    <input type="hidden" class="rating" readonly="readonly"/>
 
 Set its initial value:
 
-    <input type="text" class="rating" value="2"/>
+    <input type="hidden" class="rating" value="2"/>
 
 Or attach events:
 
@@ -55,7 +55,7 @@ Or attach events:
 
 The default rating symbols can be replaced with another ones. Just add the desired glyphicon for the filled and empty states:
 
-    <input type="text" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
+    <input type="hidden" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
 
 Check the [available glyphs](http://getbootstrap.com/components/#glyphicons-glyphs).
 
@@ -79,7 +79,7 @@ The default range is [0..5), or in plain text, starting at 0 and stopping before
 
 It can be overriden by means of two data attributes, **data-start** for the start rate value and **data-stop** for the stop/end one. If you want to define a range [1..10):
 
-    <input type="text" class="rating" data-start="1" data-stop="10"/>
+    <input type="hidden" class="rating" data-start="1" data-stop="10"/>
 
 Also you can explicitly initialize the plugin passing the start and stop values as parameters:
 
@@ -99,7 +99,7 @@ The rating range spans all the integers from **start** to **stop**, incremented 
 
 Use **data-step** attribute to change the stepping:
 
-    <input type="text" class="rating" data-stop="10" data-step="2"/>
+    <input type="hidden" class="rating" data-stop="10" data-step="2"/>
 
 Or the explicit initialization:
 
@@ -114,5 +114,5 @@ Also, as usual, you can change the default **step** globally:
 
 My Python background wouldn't forgive me not supporting negative stepping:
 
-    <input type="text" class="rating" data-stop="-10" data-step="-2"/>
+    <input type="hidden" class="rating" data-stop="-10" data-step="-2"/>
 
