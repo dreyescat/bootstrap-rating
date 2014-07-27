@@ -42,6 +42,11 @@
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
 
+      // Calculate the rate of an index according the the start and step.
+      var indexToRate = function (index) {
+        return opts.start + index * opts.step;
+      };
+
       // Build the rating control.
       var $rating = $('<div></div>').insertBefore($input);
       var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
@@ -61,7 +66,19 @@
         .on('click', '.rating-symbol', function () {
           if (!$input.prop('disabled') && !$input.prop('readonly')) {
             // Set input to the current value and 'trigger' the change handler.
-            $input.val(opts.start + $(this).index() * opts.step).change();
+            $input.val(indexToRate($(this).index())).change();
+          }
+        })
+        .on('mouseenter', '.rating-symbol', function () {
+          if (!$input.prop('disabled') && !$input.prop('readonly')) {
+            // Emphasize on hover in.
+            fillUntilRate($rating, indexToRate($(this).index()), opts);
+          }
+        })
+        .on('mouseleave', '.rating-symbol', function () {
+          if (!$input.prop('disabled') && !$input.prop('readonly')) {
+            // Restore on hover out.
+            fillUntilRate($rating, $input.val(), opts);
           }
         });
     });
