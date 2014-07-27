@@ -47,6 +47,15 @@
         return opts.start + index * opts.step;
       };
 
+      // Call f only if the input is enabled.
+      var ifEnabled = function (f) {
+        return function () {
+          if (!$input.prop('disabled') && !$input.prop('readonly')) {
+            f.call(this);
+          }
+        }
+      };
+
       // Build the rating control.
       var $rating = $('<div></div>').insertBefore($input);
       var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
@@ -63,24 +72,18 @@
         });
 
       $rating
-        .on('click', '.rating-symbol', function () {
-          if (!$input.prop('disabled') && !$input.prop('readonly')) {
-            // Set input to the current value and 'trigger' the change handler.
-            $input.val(indexToRate($(this).index())).change();
-          }
-        })
-        .on('mouseenter', '.rating-symbol', function () {
-          if (!$input.prop('disabled') && !$input.prop('readonly')) {
-            // Emphasize on hover in.
-            fillUntilRate($rating, indexToRate($(this).index()), opts);
-          }
-        })
-        .on('mouseleave', '.rating-symbol', function () {
-          if (!$input.prop('disabled') && !$input.prop('readonly')) {
-            // Restore on hover out.
-            fillUntilRate($rating, $input.val(), opts);
-          }
-        });
+        .on('click', '.rating-symbol', ifEnabled(function () {
+          // Set input to the current value and 'trigger' the change handler.
+          $input.val(indexToRate($(this).index())).change();
+        }))
+        .on('mouseenter', '.rating-symbol', ifEnabled(function () {
+          // Emphasize on hover in.
+          fillUntilRate($rating, indexToRate($(this).index()), opts);
+        }))
+        .on('mouseleave', '.rating-symbol', ifEnabled(function () {
+          // Restore on hover out.
+          fillUntilRate($rating, $input.val(), opts);
+        }));
     });
   };
 
