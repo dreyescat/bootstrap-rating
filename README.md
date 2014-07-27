@@ -6,7 +6,7 @@ See [bootstrap rating](http://dreyescat.github.io/bootstrap-rating/) in action.
 
 ## Dependencies
 
-Bootstrap Rating depends on [jQuery](http://jquery.com/) and Bootstrap for the rating symbols. Actually, it depends on the glyphs in font format that Bootstrap provides. 
+Bootstrap Rating depends on [jQuery](http://jquery.com/) and can use Bootstrap for the rating symbols. Actually, the glyphs in font format that Bootstrap provides. 
 
     <link href="dist/css/bootstrap.css" rel="stylesheet">
     <script type="text/javascript" src="dist/js/jquery-1.10.2.js"></script>
@@ -16,14 +16,10 @@ Bootstrap Rating depends on [jQuery](http://jquery.com/) and Bootstrap for the r
 
 Bootstrap Rating uses a hidden input to keep the rating value. This value corresponds to the 0-based index of the selected rating.
 
+
+Any rating input, those with class *rating*, are implicitly initialized.
+
     <input type="hidden" class="rating"/>
-
-Any rating plugin is implicitly initialized if the *bootstrap-rating.js* is loaded after the *rating* inputs:
-
-    <body>
-      <input type="hidden" class="rating"/>
-      <script type="text/javascript" src="bootstrap-rating.js"></script>
-    </body>
 
 Also it can be explicitly initialized just calling *.rating()* on the desired input:
 
@@ -55,23 +51,45 @@ Or attach events:
 
 The default rating symbols can be replaced with another ones. Just add the desired glyphicon for the filled and empty states:
 
-    <input type="hidden" class="rating" data-filled="glyphicon-heart" data-empty="glyphicon-heart-empty"/>
+    <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
 
 Check the [available glyphs](http://getbootstrap.com/components/#glyphicons-glyphs).
 
 Again, you can explicitly initialize the plugin passing the glyphicons as parameters:
 
     $('input').rating({
-      filled: 'glyphicon-heart',
-      empty: 'glyphicon-heart-empty'
+      filled: 'glyphicon glyphicon-heart',
+      empty: 'glyphicon glyphicon-heart-empty'
     });
 
 If you want to change the default glyphicons for all the rating controls, you only need to override the plugin default values:
 
-    $.fn.rating.defaults.filled = 'glyphicon-heart';
-    $.fn.rating.defaults.empty = 'glyphicon-heart-empty';
+    $.fn.rating.defaults.filled = 'glyphicon glyphicon-heart';
+    $.fn.rating.defaults.empty = 'glyphicon glyphicon-heart-empty';
 
 This needs only be called once, but remember to make these assignments before the rating controls are created.
+
+Though this control idea is to use glyphicons provided by Bootstrap, any custom symbol can be used. Even not font based ones:
+
+    .symbol {
+      display: inline-block;
+      border-radius: 50%;
+      border: 5px double white;
+      width: 30px;
+      height: 30px;
+    }
+
+    .symbol-empty {
+      background-color: #ccc;
+    }
+
+    .symbol-filled {
+      background-color: black;
+    }
+
+    <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
+
+It means that the rating control is not tightly tied to Bootstrap and you can use it without Bootstrap.
 
 ### Setting rate range
 

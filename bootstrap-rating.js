@@ -60,7 +60,7 @@
       var $rating = $('<div></div>').insertBefore($input);
       var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
       for (var i = 0; i < length; i++) {
-        $rating.append('<div class="rating-symbol glyphicon ' + opts.empty + '"></div>');
+        $rating.append('<div class="rating-symbol ' + opts.empty + '"></div>');
       }
       // Initialize the rating control with the associated input value.
       fillUntilRate($rating, $input.val(), opts);
@@ -89,8 +89,8 @@
 
   // Plugin defaults.
   $.fn.rating.defaults = {
-    filled: 'glyphicon-star',
-    empty: 'glyphicon-star-empty',
+    filled: 'glyphicon glyphicon-star',
+    empty: 'glyphicon glyphicon-star-empty',
     start: 0,
     stop: OFFSET,
     step: 1
