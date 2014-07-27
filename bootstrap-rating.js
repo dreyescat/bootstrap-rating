@@ -4,25 +4,21 @@
   var OFFSET = 5;
 
   $.fn.rating = function (options) {
-    var fillUntil = function (rate, filled, empty) {
-      var $rate = $(rate);
-      // Fill rating until the selected one (selected one included).
-      $rate.prevAll('.rating-symbol').addBack()
-        .removeClass(empty).addClass(filled);
-      // Empty rating from the selected one to the end.
-      $rate.nextAll('.rating-symbol')
-        .removeClass(filled).addClass(empty);
-    };
-
     var fillUntilRate = function ($rating, value, opts) {
+      var $rates = $rating.children();
+      // Empty all the rating symbols.
+      $rates.removeClass(opts.filled).addClass(opts.empty);
+
+      // Check the value is a valid rate according to the step.
       var rate = parseInt(value, 10);
-       // Check the value is a valid rate according to the step.
       if (!isNaN(rate) && rate % opts.step === 0) {
-        var $rates = $rating.children();
+        // Calculate the index according to the configured step.
         var index = Math.max(Math.ceil((rate - opts.start) / opts.step), 0);
         // Check the index is between the proper range [0..length).
         if (0 <= index && index < $rates.length) {
-          fillUntil($rates[index], opts.filled, opts.empty);
+          // Fill all the symbols up to the selected one.
+          $rates.eq(index).prevAll('.rating-symbol').addBack()
+            .removeClass(opts.empty).addClass(opts.filled);
         }
       }
     };
@@ -64,10 +60,8 @@
       $rating
         .on('click', '.rating-symbol', function () {
           if (!$input.prop('disabled') && !$input.prop('readonly')) {
-            var $this = $(this);
-            fillUntil(this, opts.filled, opts.empty);
             // Set input to the current value and 'trigger' the change handler.
-            $input.val(opts.start + $this.index() * opts.step).change();
+            $input.val(opts.start + $(this).index() * opts.step).change();
           }
         });
     });
