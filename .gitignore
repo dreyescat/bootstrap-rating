@@ -1,0 +1,4 @@
+# Exclude npm packages
+node_modules/
+# Exclude grunt-gh-pages temporary clones
+.grunt
