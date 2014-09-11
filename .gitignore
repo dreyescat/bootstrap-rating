@@ -1,4 +1,6 @@
 # Exclude npm packages
 node_modules/
+# Exclude bower packages
+bower_components/
 # Exclude grunt-gh-pages temporary clones
 .grunt
