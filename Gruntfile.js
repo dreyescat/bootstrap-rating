@@ -2,6 +2,7 @@ module.exports = function (grunt) {
   'use strict';
 
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-gh-pages');
 
   grunt.initConfig({
@@ -13,6 +14,19 @@ module.exports = function (grunt) {
           },
           keepalive: true
         }
+      }
+    },
+    pkg: grunt.file.readJSON('bower.json'),
+    uglify: {
+      rating: {
+        files: {
+          'bootstrap-rating.min.js': ['bootstrap-rating.js']
+        }
+      },
+      options: {
+        banner:
+          '// <%= pkg.name %> - v<%= pkg.version %> - (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %> \n' +
+          '// <%= pkg.homepage %> <%= pkg.license %>\n'
       }
     },
     'gh-pages': {
