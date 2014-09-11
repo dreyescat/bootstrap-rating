@@ -18,6 +18,8 @@ module.exports = function (grunt) {
     'gh-pages': {
       src: [
         'index.html',
+        'bootstrap-rating.js',
+        'bootstrap-rating.css',
         'bower_components/**/*'
       ]
     }
