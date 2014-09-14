@@ -4,25 +4,6 @@
   var OFFSET = 5;
 
   $.fn.rating = function (options) {
-    var fillUntilRate = function ($rating, value, opts) {
-      var $rates = $rating.children();
-      // Empty all the rating symbols.
-      $rates.removeClass(opts.filled).addClass(opts.empty);
-
-      // Check the value is a valid rate according to the step.
-      var rate = parseInt(value, 10);
-      if (!isNaN(rate) && rate % opts.step === 0) {
-        // Calculate the index according to the configured step.
-        var index = Math.max(Math.ceil((rate - opts.start) / opts.step), 0);
-        // Check the index is between the proper range [0..length).
-        if (0 <= index && index < $rates.length) {
-          // Fill all the symbols up to the selected one.
-          $rates.eq(index).prevAll('.rating-symbol').addBack()
-            .removeClass(opts.empty).addClass(opts.filled);
-        }
-      }
-    };
-
     this.each(function () {
       var $input = $(this);
       // Merge data and parameter options.
@@ -42,9 +23,41 @@
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
 
+      // Fill rating symbols until index.
+      var fillUntil = function (index) {
+        var $rates = $rating.children();
+        // Fill all the symbols up to the selected one.
+        $rates.eq(index).prevAll('.rating-symbol').addBack()
+          .removeClass(opts.empty).addClass(opts.filled);
+        // Empty the rest.
+        $rates.eq(index).nextAll('.rating-symbol')
+          .removeClass(opts.filled).addClass(opts.empty);
+      };
+
       // Calculate the rate of an index according the the start and step.
       var indexToRate = function (index) {
         return opts.start + index * opts.step;
+      };
+
+      // Get the corresponding index of a rate or NaN if rate is not a number.
+      var rateToIndex = function (rate) {
+        return Math.max(Math.ceil((rate - opts.start) / opts.step), 0);
+      };
+
+      // Check the rate is in the proper range [start..stop) and with
+      // the proper step.
+      var contains = function (rate) {
+        var start = opts.step > 0 ? opts.start : opts.stop;
+        var stop = opts.step > 0 ? opts.stop - 1 : opts.start + 1;
+        return start <= rate && rate <= stop && (opts.start + rate) % opts.step === 0;
+      };
+
+      // Update empty and filled rating symbols according to a rate.
+      var updateRate = function (rate) {
+        var value = parseInt(rate, 10);
+        if (contains(value)) {
+          fillUntil(rateToIndex(value));
+        }
       };
 
       // Call f only if the input is enabled.
@@ -58,17 +71,16 @@
 
       // Build the rating control.
       var $rating = $('<div></div>').insertBefore($input);
-      var length = Math.max(Math.ceil((opts.stop - opts.start) / opts.step), 0);
-      for (var i = 0; i < length; i++) {
+      for (var i = 0; i < rateToIndex(opts.stop); i++) {
         $rating.append('<div class="rating-symbol ' + opts.empty + '"></div>');
       }
-      // Initialize the rating control with the associated input value.
-      fillUntilRate($rating, $input.val(), opts);
+      // Initialize the rating control with the associated input value rate.
+      updateRate($input.val());
 
       // Keep rating control and its associated input in sync.
       $input
         .on('change', function () {
-          fillUntilRate($rating, $(this).val(), opts);
+          updateRate($(this).val());
         });
 
       $rating
@@ -78,11 +90,11 @@
         }))
         .on('mouseenter', '.rating-symbol', ifEnabled(function () {
           // Emphasize on hover in.
-          fillUntilRate($rating, indexToRate($(this).index()), opts);
+          fillUntil($(this).index());
         }))
         .on('mouseleave', '.rating-symbol', ifEnabled(function () {
           // Restore on hover out.
-          fillUntilRate($rating, $input.val(), opts);
+          fillUntil(rateToIndex($input.val()));
         }));
     });
   };
