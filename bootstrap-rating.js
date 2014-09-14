@@ -26,12 +26,11 @@
       // Fill rating symbols until index.
       var fillUntil = function (index) {
         var $rates = $rating.children();
+        // Empty all just in case index is NaN.
+        $rates.removeClass(opts.filled).addClass(opts.empty);
         // Fill all the symbols up to the selected one.
         $rates.eq(index).prevAll('.rating-symbol').addBack()
           .removeClass(opts.empty).addClass(opts.filled);
-        // Empty the rest.
-        $rates.eq(index).nextAll('.rating-symbol')
-          .removeClass(opts.filled).addClass(opts.empty);
       };
 
       // Calculate the rate of an index according the the start and step.
@@ -94,7 +93,7 @@
         }))
         .on('mouseleave', '.rating-symbol', ifEnabled(function () {
           // Restore on hover out.
-          fillUntil(rateToIndex($input.val()));
+          fillUntil(rateToIndex(parseInt($input.val(), 10)));
         }));
     });
   };
