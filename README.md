@@ -141,7 +141,7 @@ Every time a rating symbol is created the **extendSymbol** callback is called. T
 For example, you could bind the bootstrap tooltip on all the rating symbols to show the rate on hover:
 
     $('input').rating({
-      oncreatesymbol: function (rate) {
+      extendSymbol: function (rate) {
         $(this).tooltip({
           container: 'body',
           placement: 'bottom',
