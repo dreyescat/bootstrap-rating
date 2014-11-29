@@ -26,24 +26,38 @@
       <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
       <h3>Handle events</h3>
       <input type="hidden" class="rating check" data-filled="glyphicon glyphicon-check" data-empty="glyphicon glyphicon-unchecked"/>
+      <h3>Customize tooltips</h3>
+      <input type="hidden" class="rating-tooltip"/>
       <h3>Set stop rate to 10 [0..10)</h3>
-      <input type="hidden" class="rating check" data-stop="10"/>
+      <input type="hidden" class="rating-tooltip" data-stop="10"/>
       <h3>Set start rate to 5 [5..10)</h3>
-      <input type="hidden" class="rating check" data-start="5"/>
+      <input type="hidden" class="rating-tooltip" data-start="5"/>
       <h3>Set start and stop rate [1..10)</h3>
-      <input type="hidden" class="rating check" data-start="1" data-stop="10"/>
+      <input type="hidden" class="rating-tooltip" data-start="1" data-stop="10"/>
       <h3>Set start and stop rate [0..10) with step 2</h3>
-      <input type="hidden" class="rating check" data-stop="10" data-step="2"/>
+      <input type="hidden" class="rating-tooltip" data-stop="10" data-step="2"/>
       <h3>Set start and stop rate [0..-10) with step -2</h3>
-      <input type="hidden" class="rating check" data-stop="-10" data-step="-2"/>
+      <input type="hidden" class="rating-tooltip" data-stop="-10" data-step="-2"/>
       <h3>Non bootstrap glyphicons</h3>
       <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
     </div>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/js/tooltip.js"></script>
     <script type="text/javascript" src="bootstrap-rating.js"></script>
     <script>
-      var a = $('input.check').on('change', function () {
-        alert('Rating: ' + $(this).val());
+      $(function () {
+        $('input.check').on('change', function () {
+          alert('Rating: ' + $(this).val());
+        });
+        $('.rating-tooltip').rating({
+          oncreatesymbol: function (rate) {
+            $(this).tooltip({
+              container: 'body',
+              placement: 'bottom',
+              title: 'Rate ' + rate
+            });
+          }
+        });
       });
     </script>
   </body>
