@@ -50,7 +50,7 @@
           alert('Rating: ' + $(this).val());
         });
         $('.rating-tooltip').rating({
-          oncreatesymbol: function (rate) {
+          extendSymbol: function (rate) {
             $(this).tooltip({
               container: 'body',
               placement: 'bottom',
