@@ -134,3 +134,19 @@ My Python background wouldn't forgive me not supporting negative stepping:
 
     <input type="hidden" class="rating" data-stop="-10" data-step="-2"/>
 
+### Getting more control over the symbols
+
+Every time a rating symbol is created the **extendSymbol** callback is called. This callback gives you the full control over the symbol elements. As with any regular element, you can bind event handlers, add attributes, add classes, or anything you need to customize it. The callback's context is the rating symbol DOM element and receives the rate as parameter.
+
+For example, you could bind the bootstrap tooltip on all the rating symbols to show the rate on hover:
+
+    $('input').rating({
+      oncreatesymbol: function (rate) {
+        $(this).tooltip({
+          container: 'body',
+          placement: 'bottom',
+          title: 'Rate ' + rate
+        });
+      }
+    });
+

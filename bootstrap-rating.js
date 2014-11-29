@@ -71,7 +71,9 @@
       // Build the rating control.
       var $rating = $('<div></div>').insertBefore($input);
       for (var i = 0; i < rateToIndex(opts.stop); i++) {
-        $rating.append('<div class="rating-symbol ' + opts.empty + '"></div>');
+        var $symbol = $('<div class="rating-symbol ' + opts.empty + '"></div>');
+        $rating.append($symbol);
+        opts.extendSymbol.call($symbol, indexToRate(i));
       }
       // Initialize the rating control with the associated input value rate.
       updateRate($input.val());
@@ -104,7 +106,8 @@
     empty: 'glyphicon glyphicon-star-empty',
     start: 0,
     stop: OFFSET,
-    step: 1
+    step: 1,
+    extendSymbol: function (rate) {},
   };
 
   $(function () {
