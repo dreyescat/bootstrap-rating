@@ -10,7 +10,6 @@ Bootstrap Rating depends on [jQuery](http://jquery.com/) and can use Bootstrap f
 
     <link href="dist/css/bootstrap.css" rel="stylesheet">
     <script type="text/javascript" src="dist/js/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="bootstrap-rating.js"></script>  
 
 ## Usage
 
@@ -25,7 +24,7 @@ Also it can be explicitly initialized just calling *.rating()* on the desired in
 
     $('input').rating();
 
-### Behind the rating control
+## Behind the rating control
 
 Bootstrap Rating uses an input to keep the rating value. But the relationship between the *behind the scenes* input control and the rating control goes a little further. This input is the associated control. They are tied together.
 
@@ -47,7 +46,7 @@ Or attach events:
       alert('Rating: ' + $(this).val());
     });
 
-### Changing the rating symbols
+## Customizing the rating symbols
 
 The default rating symbols can be replaced with another ones. Just add the desired glyphicon for the filled and empty states:
 
@@ -69,29 +68,49 @@ If you want to change the default glyphicons for all the rating controls, you on
 
 This needs only be called once, but remember to make these assignments before the rating controls are created.
 
-Though this control idea is to use glyphicons provided by Bootstrap, any custom symbol can be used. Even not font based ones:
+### Using Non-Bootsrap icons
 
-    .symbol {
-      display: inline-block;
-      border-radius: 50%;
-      border: 5px double white;
-      width: 30px;
-      height: 30px;
-    }
+Though the original idea was to use glyphicons provided by Bootstrap, any symbol can be used. It means that the rating control is not tightly tied to Bootstrap and you can use it without Bootstrap.
 
-    .symbol-empty {
-      background-color: #ccc;
-    }
+#### Font Awesome icons
 
-    .symbol-filled {
-      background-color: black;
-    }
+You can use the `Font Awesome by Dave Gandy - http://fontawesome.io`. Check [Font Awesome](http://fortawesome.github.io/Font-Awesome/icons/) for a list of available icons.
 
-    <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
+1. Include in the `<head>` the reference to the Font Awesome CSS.
 
-It means that the rating control is not tightly tied to Bootstrap and you can use it without Bootstrap.
+        <link rel="stylesheet" href="path/to/font-awesome.min.css">
 
-### Setting rate range
+1. Start using the classes provided by Font Awesome.
+
+        <input type="hidden" class="rating" data-filled="fa fa-bell fa-3x" data-empty="fa fa-bell-o fa-3x"/>
+
+#### Custom CSS icons
+
+You can even create your own not font based icons, using raw CSS:
+
+1. Define a symbol class for empty and filled states.
+
+        .symbol {
+          display: inline-block;
+          border-radius: 50%;
+          border: 5px double white;
+          width: 30px;
+          height: 30px;
+        }
+
+        .symbol-empty {
+          background-color: #ccc;
+        }
+
+        .symbol-filled {
+          background-color: black;
+        }
+
+1. Start using those custom classes.
+
+        <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
+
+## Setting rate range
 
 The default range is [0..5), or in plain text, starting at 0 and stopping before 5.
 
@@ -111,7 +130,7 @@ If what you need is to change the default start and stop values for all the rati
     $.fn.rating.defaults.start = 1;
     $.fn.rating.defaults.stop = 10;
 
-#### Stepping different
+### Stepping different
 
 The rating range spans all the integers from **start** to **stop**, incremented or decremented by a **step**. The default **step** is 1.
 
@@ -134,7 +153,7 @@ My Python background wouldn't forgive me not supporting negative stepping:
 
     <input type="hidden" class="rating" data-stop="-10" data-step="-2"/>
 
-### Getting more control over the symbols
+## Getting more control over the symbols
 
 Every time a rating symbol is created the **extendSymbol** callback is called. This callback gives you the full control over the symbol elements. As with any regular element, you can bind event handlers, add attributes, add classes, or anything you need to customize it. The callback's context is the rating symbol DOM element and receives the rate as parameter.
 
