@@ -112,23 +112,34 @@ You can even create your own not font based icons, using raw CSS:
 
 ## Setting rate range
 
-The default range is [0..5), or in plain text, starting at 0 and stopping before 5.
+The default range is (0..5], or in plain text, starting at 0 (not included) and stopping at 5 (included). In this case the range of whole symbols would include [1, 2, 3, 4, 5].
 
-It can be overriden by means of two data attributes, **data-start** for the start rate value and **data-stop** for the stop/end one. If you want to define a range [1..10):
+It can be overriden by means of two data attributes, **data-start** for the start rate value and **data-stop** for the stop/end one. If you want to define a range (5..10]:
 
-    <input type="hidden" class="rating" data-start="1" data-stop="10"/>
+    <input type="hidden" class="rating" data-start="5" data-stop="10"/>
 
 Also you can explicitly initialize the plugin passing the start and stop values as parameters:
 
     $('input').rating({
-      start: 1,
+      start: 5,
       stop: 10
     });
 
 If what you need is to change the default start and stop values for all the rating controls, just override the plugin defaults:
 
-    $.fn.rating.defaults.start = 1;
+    $.fn.rating.defaults.start = 5;
     $.fn.rating.defaults.stop = 10;
+
+### Fractional range
+
+You can configure the rating to get partial or fractional rates. The **data-fractions** indicates the number of equal parts that make up a whole symbol.
+
+For example, a **data-fractions** of two will create a rating with half symbols:
+
+    <input type="hidden" class="rating" data-fractions="2"/>
+
+The possible values in this case would be all the whole and half rates between (0..5], i.e, [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].
+
 
 ### Stepping different
 
@@ -145,6 +156,8 @@ Or the explicit initialization:
       step: 2
     });
 
+The range of whole symbols defined in this case would include [2, 4, 6, 8, 10].
+
 Also, as usual, you can change the default **step** globally:
 
     $.fn.rating.defaults.step = 2
@@ -152,6 +165,8 @@ Also, as usual, you can change the default **step** globally:
 My Python background wouldn't forgive me not supporting negative stepping:
 
     <input type="hidden" class="rating" data-stop="-10" data-step="-2"/>
+
+Giving [-2, -4, -6, -8, -10] as the range of whole symbols.
 
 ## Getting more control over the symbols
 

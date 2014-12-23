@@ -18,30 +18,34 @@
       <hr/>
       <h3>Default rating</h3>
       <input type="hidden" class="rating"/>
+      <h3>Half rating</h3>
+      <input type="hidden" class="rating" data-fractions="2"/>
       <h3>Disabled rating</h3>
       <input type="hidden" class="rating" disabled="disabled"/>
-      <h3>Readonly rating</h3>
-      <input type="hidden" class="rating" readonly="readonly"/>
       <h3>Readonly rating with a value</h3>
       <input type="hidden" class="rating" readonly="readonly" value="3"/>
+      <h3>Readonly rating with a fractional value</h3>
+      <input type="hidden" class="rating" readonly="readonly" value="2.5"/>
       <h3>Customized heart rating</h3>
       <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
       <h3>Handle events</h3>
       <input type="hidden" class="rating check" data-filled="glyphicon glyphicon-check" data-empty="glyphicon glyphicon-unchecked"/>
       <h3>Customize tooltips</h3>
       <input type="hidden" class="rating-tooltip"/>
-      <h3>Set stop rate to 10 [0..10)</h3>
+      <h3>Set stop rate to 10 [1..10]</h3>
       <input type="hidden" class="rating-tooltip" data-stop="10"/>
-      <h3>Set start rate to 5 [5..10)</h3>
+      <h3>Set start rate to 5 [6..10]</h3>
       <input type="hidden" class="rating-tooltip" data-start="5"/>
-      <h3>Set start and stop rate [1..10)</h3>
+      <h3>Set start and stop rate [2..10]</h3>
       <input type="hidden" class="rating-tooltip" data-start="1" data-stop="10"/>
-      <h3>Set start and stop rate [0..10) with step 2</h3>
+      <h3>Set start and stop rate [2..10] with step 2</h3>
       <input type="hidden" class="rating-tooltip" data-stop="10" data-step="2"/>
-      <h3>Set start and stop rate [0..-10) with step -2</h3>
+      <h3>Set start and stop rate [-2..-10] with step -2</h3>
       <input type="hidden" class="rating-tooltip" data-stop="-10" data-step="-2"/>
       <h3>Font Awesome icons</h3>
       <input type="hidden" class="rating-tooltip" data-filled="fa fa-bell fa-3x" data-empty="fa fa-bell-o fa-3x"/>
+      <h3>Fractional rating</h3>
+      <input type="hidden" class="rating" data-filled="fa fa-star fa-3x" data-empty="fa fa-star-o fa-3x" data-fractions="3"/>
       <h3>Custom CSS icons</h3>
       <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
     </div>
@@ -61,6 +65,14 @@
               title: 'Rate ' + rate
             });
           }
+        });
+        $('.rating').each(function () {
+          $('<span class="label label-default"></span>')
+            .text($(this).val() || ' ')
+            .insertAfter(this);
+        });
+        $('.rating').on('change', function () {
+          $(this).next('.label').text($(this).val());
         });
       });
     </script>
