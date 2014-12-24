@@ -1,7 +1,7 @@
 {
   "name": "bootstrap-rating",
   "main": "bootstrap-rating.js",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "homepage": "https://github.com/dreyescat/bootstrap-rating",
   "author": {
     "name": "dreyescat",
@@ -10,6 +10,7 @@
   "description": "A small jQuery plugin that turns an input field into a highly customizable rating component",
   "keywords": [
     "rating",
+    "fraction",
     "jquery",
     "plugin",
     "bootstrap",
