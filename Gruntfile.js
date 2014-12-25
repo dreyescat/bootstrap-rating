@@ -30,6 +30,12 @@ module.exports = function (grunt) {
       }
     },
     'gh-pages': {
+      options: {
+        user: {
+          name: '<%= pkg.author.name %>',
+          email: '<%= pkg.author.email %>'
+        }
+      },
       src: [
         'index.html',
         'bootstrap-rating.js',
