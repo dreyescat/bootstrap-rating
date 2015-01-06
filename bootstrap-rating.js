@@ -63,7 +63,7 @@
       // Check the rate is in the proper range [start..stop].
       var contains = function (rate) {
         var start = opts.step > 0 ? opts.start : opts.stop;
-        var stop = opts.step > 0 ? opts.stop - 1 : opts.start + 1;
+        var stop = opts.step > 0 ? opts.stop : opts.start;
         return start <= rate && rate <= stop;
       };
 
