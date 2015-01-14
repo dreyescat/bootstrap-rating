@@ -11,12 +11,14 @@
       var opts = $.extend({}, $input.data(), options);
       // Sanitize start, stop, step, and fractions.
       // All of them start, stop, and step must be integers.
+      opts.start = parseInt(opts.start, 10);
+      opts.start = isNaN(opts.start) ? undefined : opts.start;
       // In case we don't have a valid stop rate try to get a reasonable
       // one based on the existence of a valid start rate.
-      opts.start = parseInt(opts.start, 10) || undefined;
-      opts.stop = parseInt(opts.stop, 10) ||
-                     opts.start + OFFSET ||
-                     undefined;
+      opts.stop = parseInt(opts.stop, 10);
+      opts.stop = isNaN(opts.stop) ?
+        opts.start + OFFSET || undefined : opts.stop;
+      // 0 step is ignored.
       opts.step = parseInt(opts.step, 10) || undefined;
       // Symbol fractions and scale (number of significant digits).
       // 0 is ignored and negative numbers are turned to positive.
