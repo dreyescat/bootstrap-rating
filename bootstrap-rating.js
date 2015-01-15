@@ -33,6 +33,10 @@
       var fillUntil = function (index) {
         // Get the index of the last whole symbol.
         var i = Math.floor(index);
+        // Hide completely hidden symbols background.
+        $rating.find('.rating-symbol-background')
+          .css('visibility', 'visible')
+          .slice(0, i).css('visibility', 'hidden');
         var $rates = $rating.find('.rating-symbol-foreground');
         // Reset foreground
         $rates.width(0);
