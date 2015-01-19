@@ -1,0 +1,30 @@
+{
+  "name": "bootstrap-iconpicker",
+  "description": "Simple Iconpicker for Bootstrap 3.x",
+  "version": "1.6.0",
+  "keywords": [
+    "Bootstrap",
+    "Iconpicker",
+    "Glyphicon",
+    "Font Awesome",    
+    "Elusive Icons",
+    "Ionicons",
+    "Map Icons",
+    "Octicons",
+    "Typicons",
+    "Weather Icons"
+  ],
+  "license": "MIT",
+  "authers": [
+    {
+      "name": "Victor Valencia Rico",
+      "email": "valencia_vik@hotmail.com",
+      "homepage": "https://github.com/victor-valencia"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://victor-valencia.github.io/bootstrap-iconpicker"
+  },
+  "main": "bootstrap-iconpicker/"  
+}

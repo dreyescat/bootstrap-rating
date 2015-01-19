@@ -4,19 +4,21 @@
   var OFFSET = 5;
 
   $.fn.rating = function (options) {
-    this.each(function () {
+    return this.each(function () {
       var $input = $(this);
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
       var opts = $.extend({}, $input.data(), options);
       // Sanitize start, stop, step, and fractions.
       // All of them start, stop, and step must be integers.
+      opts.start = parseInt(opts.start, 10);
+      opts.start = isNaN(opts.start) ? undefined : opts.start;
       // In case we don't have a valid stop rate try to get a reasonable
       // one based on the existence of a valid start rate.
-      opts.start = parseInt(opts.start, 10) || undefined;
-      opts.stop = parseInt(opts.stop, 10) ||
-                     opts.start + OFFSET ||
-                     undefined;
+      opts.stop = parseInt(opts.stop, 10);
+      opts.stop = isNaN(opts.stop) ?
+        opts.start + OFFSET || undefined : opts.stop;
+      // 0 step is ignored.
       opts.step = parseInt(opts.step, 10) || undefined;
       // Symbol fractions and scale (number of significant digits).
       // 0 is ignored and negative numbers are turned to positive.
@@ -31,6 +33,10 @@
       var fillUntil = function (index) {
         // Get the index of the last whole symbol.
         var i = Math.floor(index);
+        // Hide completely hidden symbols background.
+        $rating.find('.rating-symbol-background')
+          .css('visibility', 'visible')
+          .slice(0, i).css('visibility', 'hidden');
         var $rates = $rating.find('.rating-symbol-foreground');
         // Reset foreground
         $rates.width(0);
@@ -120,19 +126,19 @@
 
       var fractionalIndex = function (e) {
         var $symbol = $(e.currentTarget);
-        var x = e.pageX - $symbol.offset().left;
+        var x = (e.pageX || e.originalEvent.touches[0].pageX) - $symbol.offset().left;
         return $symbol.index() + x / $symbol.width();
       };
       $rating
-        .on('click', '.rating-symbol', ifEnabled(function (e) {
+        .on('mousedown touchstart', '.rating-symbol', ifEnabled(function (e) {
           // Set input 'trigger' the change event.
           $input.val(indexToRate(fractionalIndex(e))).change();
         }))
-        .on('mousemove', '.rating-symbol', ifEnabled(function (e) {
+        .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
           // Fill the symbols as fractions chunks.
           fillUntil(roundToFraction(fractionalIndex(e)));
         }))
-        .on('mouseleave', '.rating-symbol', ifEnabled(function () {
+        .on('mouseleave touchend', '.rating-symbol', ifEnabled(function () {
           // Restore on hover out.
           fillUntil(rateToIndex(parseFloat($input.val())));
         }));
