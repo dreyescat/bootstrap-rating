@@ -4,7 +4,7 @@
   var OFFSET = 5;
 
   $.fn.rating = function (options) {
-    this.each(function () {
+    return this.each(function () {
       var $input = $(this);
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
