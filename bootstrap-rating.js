@@ -126,19 +126,19 @@
 
       var fractionalIndex = function (e) {
         var $symbol = $(e.currentTarget);
-        var x = e.pageX - $symbol.offset().left;
+        var x = (e.pageX || e.originalEvent.touches[0].pageX) - $symbol.offset().left;
         return $symbol.index() + x / $symbol.width();
       };
       $rating
-        .on('click', '.rating-symbol', ifEnabled(function (e) {
+        .on('mousedown touchstart', '.rating-symbol', ifEnabled(function (e) {
           // Set input 'trigger' the change event.
           $input.val(indexToRate(fractionalIndex(e))).change();
         }))
-        .on('mousemove', '.rating-symbol', ifEnabled(function (e) {
+        .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
           // Fill the symbols as fractions chunks.
           fillUntil(roundToFraction(fractionalIndex(e)));
         }))
-        .on('mouseleave', '.rating-symbol', ifEnabled(function () {
+        .on('mouseleave touchend', '.rating-symbol', ifEnabled(function () {
           // Restore on hover out.
           fillUntil(rateToIndex(parseFloat($input.val())));
         }));
