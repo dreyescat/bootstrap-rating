@@ -6,6 +6,10 @@
   $.fn.rating = function (options) {
     return this.each(function () {
       var $input = $(this);
+      // Prevent against multiple instantiations.
+      if ($input.data('rating'))
+        return;
+      $input.data('rating', true);
       // Merge data and parameter options.
       // Those provided as parameter prevail over the data ones.
       var opts = $.extend({}, $input.data(), options);
