@@ -28,6 +28,8 @@
       // 0 is ignored and negative numbers are turned to positive.
       opts.fractions = Math.abs(parseInt(opts.fractions, 10)) || undefined;
       opts.scale = Math.abs(parseInt(opts.scale, 10)) || undefined;
+      // Inherit default filled if none is defined for the selected symbol.
+      opts.filledSelected = opts.filledSelected || opts.filled;
 
       // Extend/Override the default options with those provided either as
       // data attributes or function parameters.
@@ -45,7 +47,11 @@
         // Reset foreground
         $rates.width(0);
         // Fill all the foreground symbols up to the selected one.
-        $rates.slice(0, i).width('auto');
+        $rates.slice(0, i).width('auto')
+          .find('span').attr('class', opts.filled);
+        // Amend selected symbol.
+        $rates.eq(index % 1 ? i : i - 1)
+          .find('span').attr('class', opts.filledSelected);
         // Partially fill the fractional one.
         $rates.eq(i).width(index % 1 * 100 + '%');
       };
@@ -108,7 +114,7 @@
         // Add foreground symbol to the symbol container.
         // The filled icon is wrapped with a div to allow fractional selection.
         $('<div class="rating-symbol-foreground"></div>')
-          .append('<span class="' + opts.filled + '"></span>')
+          .append('<span></span>')
           .css({
             display: 'inline-block',
             position: 'absolute',
@@ -152,6 +158,7 @@
   // Plugin defaults.
   $.fn.rating.defaults = {
     filled: 'glyphicon glyphicon-star',
+    filledSelected: undefined,
     empty: 'glyphicon glyphicon-star-empty',
     start: 0,
     stop: OFFSET,

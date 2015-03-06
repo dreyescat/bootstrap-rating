@@ -68,6 +68,18 @@ If you want to change the default glyphicons for all the rating controls, you on
 
 This needs only be called once, but remember to make these assignments before the rating controls are created.
 
+If you even want more control over the symbols appearance, you can customize the selected symbol filled state with the filled-selected attribute. This attribute takes precedence over the default filled state allowing you, for example, to fill only the selected one:
+
+    <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart-empty" data-filled-selected="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
+
+Or programmatically:
+
+    $('input').rating({
+      filled: 'glyphicon glyphicon-heart-empty',
+      filledSelected: 'glyphicon glyphicon-heart',
+      empty: 'glyphicon glyphicon-heart-empty'
+    });
+
 ### Using Non-Bootsrap icons
 
 Though the original idea was to use glyphicons provided by Bootstrap, any symbol can be used. It means that the rating control is not tightly tied to Bootstrap and you can use it without Bootstrap.
