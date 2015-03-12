@@ -47,7 +47,7 @@
       <h3>Font Awesome icons</h3>
       <input type="hidden" class="rating-tooltip" data-filled="fa fa-bell fa-3x" data-empty="fa fa-bell-o fa-3x"/>
       <h3>Fractional rating</h3>
-      <input type="hidden" class="rating" data-filled="fa fa-star fa-3x" data-empty="fa fa-star-o fa-3x" data-fractions="3"/>
+      <input type="hidden" class="rating-tooltip-manual" data-filled="fa fa-star fa-3x" data-empty="fa fa-star-o fa-3x" data-fractions="3"/>
       <h3>Custom CSS icons</h3>
       <input type="hidden" class="rating" data-filled="symbol symbol-filled" data-empty="symbol symbol-empty"/>
     </div>
@@ -65,6 +65,26 @@
               container: 'body',
               placement: 'bottom',
               title: 'Rate ' + rate
+            });
+          }
+        });
+        $('.rating-tooltip-manual').rating({
+          extendSymbol: function () {
+            var title;
+            $(this).tooltip({
+              container: 'body',
+              placement: 'bottom',
+              trigger: 'manual',
+              title: function () {
+                return title;
+              }
+            });
+            $(this).on('rating.rateenter', function (e, rate) {
+              title = rate;
+              $(this).tooltip('show');
+            })
+            .on('rating.rateleave', function () {
+              $(this).tooltip('hide');
             });
           }
         });

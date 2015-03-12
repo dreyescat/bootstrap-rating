@@ -196,3 +196,31 @@ For example, you could bind the bootstrap tooltip on all the rating symbols to s
       }
     });
 
+### Symbol events
+
+Rating symbols can fire two events **rating.rateenter** and **rate.rateleave**. These events are triggered when the pointer enters and leaves a rate.
+
+For example, you can use these events to dynamically update the bootstrap tooltip, even for fractional ratings.
+
+    <input type="hidden" class="rating-tooltip-manual" data-filled="fa fa-star fa-3x" data-empty="fa fa-star-o fa-3x" data-fractions="3"/>
+
+    $('.rating-tooltip-manual').rating({
+      extendSymbol: function () {
+        var title;
+        $(this).tooltip({
+          container: 'body',
+          placement: 'bottom',
+          trigger: 'manual',
+          title: function () {
+            return title;
+          }
+        });
+        $(this).on('rating.rateenter', function (e, rate) {
+          title = rate;
+          $(this).tooltip('show');
+        })
+        .on('rating.rateleave', function () {
+          $(this).tooltip('hide');
+        });
+      }
+    });

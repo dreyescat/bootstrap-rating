@@ -137,18 +137,38 @@
       var fractionalIndex = function (e) {
         var $symbol = $(e.currentTarget);
         var x = (e.pageX || e.originalEvent.touches[0].pageX) - $symbol.offset().left;
+        // NOTE: When the mouse pointer is close to the left side of the symbol
+        // a negative x is returned. Probably some precision error in the
+        // calculation.
+        // x should never be less than 0 because this would mean that we are in
+        // the previous symbol.
+        x = x > 0 ? x : opts.scale * 0.1;
         return $symbol.index() + x / $symbol.width();
       };
+      // Keep the current highlighted index (fractional or not).
+      var index;
       $rating
         .on('mousedown touchstart', '.rating-symbol', ifEnabled(function (e) {
           // Set input 'trigger' the change event.
           $input.val(indexToRate(fractionalIndex(e))).change();
         }))
         .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
+          var current = roundToFraction(fractionalIndex(e));
+          if (current !== index) {
+            // Trigger pseudo rate leave event if the mouse pointer is not
+            // leaving from another symbol (mouseleave).
+            if (index !== undefined) $(this).trigger('rating.rateleave');
+            // Update index and trigger rate enter event.
+            index = current;
+            $(this).trigger('rating.rateenter', [indexToRate(index)]);
+          }
           // Fill the symbols as fractions chunks.
-          fillUntil(roundToFraction(fractionalIndex(e)));
+          fillUntil(current);
         }))
         .on('mouseleave touchend', '.rating-symbol', ifEnabled(function () {
+          // When a symbol is left, reset index and trigger rate leave event.
+          index = undefined;
+          $(this).trigger('rating.rateleave');
           // Restore on hover out.
           fillUntil(rateToIndex(parseFloat($input.val())));
         }));
