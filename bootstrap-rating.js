@@ -28,12 +28,12 @@
       // 0 is ignored and negative numbers are turned to positive.
       opts.fractions = Math.abs(parseInt(opts.fractions, 10)) || undefined;
       opts.scale = Math.abs(parseInt(opts.scale, 10)) || undefined;
-      // Inherit default filled if none is defined for the selected symbol.
-      opts.filledSelected = opts.filledSelected || opts.filled;
 
       // Extend/Override the default options with those provided either as
       // data attributes or function parameters.
       opts = $.extend({}, $.fn.rating.defaults, opts);
+      // Inherit default filled if none is defined for the selected symbol.
+      opts.filledSelected = opts.filledSelected || opts.filled;
 
       // Fill rating symbols until index.
       var fillUntil = function (index) {
