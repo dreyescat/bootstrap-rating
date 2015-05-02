@@ -3,16 +3,12 @@
 
   var OFFSET = 5;
 
-  $.fn.rating = function (options) {
-    return this.each(function () {
-      var $input = $(this);
-      // Prevent against multiple instantiations.
-      if ($input.data('rating'))
-        return;
-      $input.data('rating', true);
-      // Merge data and parameter options.
-      // Those provided as parameter prevail over the data ones.
-      var opts = $.extend({}, $input.data(), options);
+  function Rating(element, options) {
+    this.$input = $(element);
+    this.$rating = $('<span></span>').insertBefore(this.$input);
+    // Merge data and parameter options.
+    // Those provided as parameter prevail over the data ones.
+    this.options = (function (opts) {
       // Sanitize start, stop, step, and fractions.
       // All of them start, stop, and step must be integers.
       opts.start = parseInt(opts.start, 10);
@@ -34,64 +30,18 @@
       opts = $.extend({}, $.fn.rating.defaults, opts);
       // Inherit default filled if none is defined for the selected symbol.
       opts.filledSelected = opts.filledSelected || opts.filled;
+      return opts;
+    }($.extend({}, this.$input.data(), options)));
 
-      // Fill rating symbols until index.
-      var fillUntil = function (index) {
-        // Get the index of the last whole symbol.
-        var i = Math.floor(index);
-        // Hide completely hidden symbols background.
-        $rating.find('.rating-symbol-background')
-          .css('visibility', 'visible')
-          .slice(0, i).css('visibility', 'hidden');
-        var $rates = $rating.find('.rating-symbol-foreground');
-        // Reset foreground
-        $rates.width(0);
-        // Fill all the foreground symbols up to the selected one.
-        $rates.slice(0, i).width('auto')
-          .find('span').attr('class', opts.filled);
-        // Amend selected symbol.
-        $rates.eq(index % 1 ? i : i - 1)
-          .find('span').attr('class', opts.filledSelected);
-        // Partially fill the fractional one.
-        $rates.eq(i).width(index % 1 * 100 + '%');
-      };
+    this._init();
+  };
 
-      // Calculate the rate of an index according the the start and step.
-      var indexToRate = function (index) {
-        return opts.start + Math.floor(index) * opts.step +
-          opts.step * roundToFraction(index % 1);
-      };
+  Rating.prototype = {
+    _init: function () {
+      var rating = this,
+          $input = this.$input,
+          $rating = this.$rating;
 
-      // Calculate the corresponding index for a rate.
-      var rateToIndex = function (rate) {
-        return (rate - opts.start) / opts.step;
-      };
-
-      // Round index to the configured opts.fractions.
-      var roundToFraction = function (index) {
-        // Get the closest top fraction.
-        var fraction = Math.ceil(index % 1 * opts.fractions) / opts.fractions;
-        // Truncate decimal trying to avoid float precission issues.
-        var p = Math.pow(10, opts.scale);
-        return Math.floor(index) + Math.floor(fraction * p) / p;
-      };
-
-      // Check the rate is in the proper range [start..stop].
-      var contains = function (rate) {
-        var start = opts.step > 0 ? opts.start : opts.stop;
-        var stop = opts.step > 0 ? opts.stop : opts.start;
-        return start <= rate && rate <= stop;
-      };
-
-      // Update empty and filled rating symbols according to a rate.
-      var updateRate = function (rate) {
-        var value = parseFloat(rate);
-        if (contains(value)) {
-          fillUntil(rateToIndex(value));
-        }
-      };
-
-      // Call f only if the input is enabled.
       var ifEnabled = function (f) {
         return function (e) {
           if (!$input.prop('disabled') && !$input.prop('readonly')) {
@@ -101,15 +51,14 @@
       };
 
       // Build the rating control.
-      var $rating = $('<span></span>').insertBefore($input);
-      for (var i = 1; i <= rateToIndex(opts.stop); i++) {
+      for (var i = 1; i <= this._rateToIndex(this.options.stop); i++) {
         // Create the rating symbol container.
         var $symbol = $('<div class="rating-symbol"></div>').css({
             display: 'inline-block',
             position: 'relative'
         });
         // Add background symbol to the symbol container.
-        $('<div class="rating-symbol-background ' + opts.empty + '"></div>')
+        $('<div class="rating-symbol-background ' + this.options.empty + '"></div>')
           .appendTo($symbol);
         // Add foreground symbol to the symbol container.
         // The filled icon is wrapped with a div to allow fractional selection.
@@ -123,15 +72,15 @@
             width: 0
           }).appendTo($symbol);
         $rating.append($symbol);
-        opts.extendSymbol.call($symbol, indexToRate(i));
+        this.options.extendSymbol.call($symbol, this._indexToRate(i));
       }
       // Initialize the rating control with the associated input value rate.
-      updateRate($input.val());
+      this._updateRate($input.val());
 
       // Keep rating control and its associated input in sync.
       $input
         .on('change', function () {
-          updateRate($(this).val());
+          rating._updateRate($(this).val());
         });
 
       var fractionalIndex = function (e) {
@@ -142,7 +91,7 @@
         // calculation.
         // x should never be less than 0 because this would mean that we are in
         // the previous symbol.
-        x = x > 0 ? x : opts.scale * 0.1;
+        x = x > 0 ? x : rating.options.scale * 0.1;
         return $symbol.index() + x / $symbol.width();
       };
       // Keep the current highlighted index (fractional or not).
@@ -150,29 +99,105 @@
       $rating
         .on('mousedown touchstart', '.rating-symbol', ifEnabled(function (e) {
           // Set input 'trigger' the change event.
-          $input.val(indexToRate(fractionalIndex(e))).change();
+          $input.val(rating._indexToRate(fractionalIndex(e))).change();
         }))
         .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
-          var current = roundToFraction(fractionalIndex(e));
+          var current = rating._roundToFraction(fractionalIndex(e));
           if (current !== index) {
             // Trigger pseudo rate leave event if the mouse pointer is not
             // leaving from another symbol (mouseleave).
             if (index !== undefined) $(this).trigger('rating.rateleave');
             // Update index and trigger rate enter event.
             index = current;
-            $(this).trigger('rating.rateenter', [indexToRate(index)]);
+            $(this).trigger('rating.rateenter', [rating._indexToRate(index)]);
           }
           // Fill the symbols as fractions chunks.
-          fillUntil(current);
+          rating._fillUntil(current);
         }))
         .on('mouseleave touchend', '.rating-symbol', ifEnabled(function () {
           // When a symbol is left, reset index and trigger rate leave event.
           index = undefined;
           $(this).trigger('rating.rateleave');
           // Restore on hover out.
-          fillUntil(rateToIndex(parseFloat($input.val())));
+          rating._fillUntil(rating._rateToIndex(parseFloat($input.val())));
         }));
+
+    },
+    // Fill rating symbols until index.
+    _fillUntil: function (index) {
+      var $rating = this.$rating;
+      // Get the index of the last whole symbol.
+      var i = Math.floor(index);
+      // Hide completely hidden symbols background.
+      $rating.find('.rating-symbol-background')
+        .css('visibility', 'visible')
+        .slice(0, i).css('visibility', 'hidden');
+      var $rates = $rating.find('.rating-symbol-foreground');
+      // Reset foreground
+      $rates.width(0);
+      // Fill all the foreground symbols up to the selected one.
+      $rates.slice(0, i).width('auto')
+        .find('span').attr('class', this.options.filled);
+      // Amend selected symbol.
+      $rates.eq(index % 1 ? i : i - 1)
+        .find('span').attr('class', this.options.filledSelected);
+      // Partially fill the fractional one.
+      $rates.eq(i).width(index % 1 * 100 + '%');
+    },
+    // Calculate the rate of an index according the the start and step.
+    _indexToRate: function (index) {
+      return this.options.start + Math.floor(index) * this.options.step +
+        this.options.step * this._roundToFraction(index % 1);
+    },
+    // Calculate the corresponding index for a rate.
+    _rateToIndex: function (rate) {
+      return (rate - this.options.start) / this.options.step;
+    },
+    // Round index to the configured opts.fractions.
+    _roundToFraction: function (index) {
+      // Get the closest top fraction.
+      var fraction = Math.ceil(index % 1 * this.options.fractions) / this.options.fractions;
+      // Truncate decimal trying to avoid float precission issues.
+      var p = Math.pow(10, this.options.scale);
+      return Math.floor(index) + Math.floor(fraction * p) / p;
+    },
+    // Check the rate is in the proper range [start..stop].
+    _contains: function (rate) {
+      var start = this.options.step > 0 ? this.options.start : this.options.stop;
+      var stop = this.options.step > 0 ? this.options.stop : this.options.start;
+      return start <= rate && rate <= stop;
+    },
+    // Update empty and filled rating symbols according to a rate.
+    _updateRate: function (rate) {
+      var value = parseFloat(rate);
+      if (this._contains(value)) {
+        this._fillUntil(this._rateToIndex(value));
+        this.$input.val(value);
+      }
+    },
+    rate: function (value) {
+      if (value === undefined) {
+        return this.$input.val();
+      }
+      this._updateRate(value);
+    }
+  };
+
+  $.fn.rating = function (options) {
+    var args = Array.prototype.slice.call(arguments, 1),
+        result;
+    this.each(function () {
+      var $input = $(this);
+      var rating = $input.data('rating');
+      if (!rating) {
+        $input.data('rating', (rating = new Rating(this, options)));
+      }
+      // Underscore are used for private methods.
+      if (typeof options === 'string' && options[0] !== '_') {
+        result = rating[options].apply(rating, args);
+      }
     });
+    return result || this;
   };
 
   // Plugin defaults.
