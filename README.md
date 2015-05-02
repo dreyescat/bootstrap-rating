@@ -224,3 +224,17 @@ For example, you can use these events to dynamically update the bootstrap toolti
         });
       }
     });
+
+## Methods
+
+### rate
+
+You can programmatically set or get the current rating value via javascript using the `rate` method.
+
+To set the rate value:
+
+    $('input').rating('rate', 2.5);
+
+To get the rate value:
+
+    var rate = $('input').rating('rate');

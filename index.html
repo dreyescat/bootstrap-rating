@@ -32,6 +32,11 @@
       <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart-empty" data-filled-selected="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
       <h3>Handle events</h3>
       <input type="hidden" class="rating check" data-filled="glyphicon glyphicon-check" data-empty="glyphicon glyphicon-unchecked"/>
+      <h3>Programmatically set/get rate</h3>
+      <input type="hidden" class="rating-tooltip" id="programmatically-rating">
+      <input type="number" id="programmatically-value">
+      <button type="button" id="programmatically-set">Set value</button>
+      <button type="button" id="programmatically-get">Get value</button>
       <h3>Customize tooltips</h3>
       <input type="hidden" class="rating-tooltip"/>
       <h3>Set stop rate to 10 [1..10]</h3>
@@ -58,6 +63,12 @@
       $(function () {
         $('input.check').on('change', function () {
           alert('Rating: ' + $(this).val());
+        });
+        $('#programmatically-set').click(function () {
+          $('#programmatically-rating').rating('rate', $('#programmatically-value').val());
+        });
+        $('#programmatically-get').click(function () {
+          alert($('#programmatically-rating').rating('rate'));
         });
         $('.rating-tooltip').rating({
           extendSymbol: function (rate) {
