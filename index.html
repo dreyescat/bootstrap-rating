@@ -11,6 +11,12 @@
     <link href="bower_components/fontawesome/css/font-awesome.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="bootstrap-rating.css" rel="stylesheet">
+    <style>
+      .custom-heart {
+        font-size: 2.5em;
+        color: red;
+      }
+    </style>
   </head>
   <body>
     <div class="survey-builder container">
@@ -27,7 +33,7 @@
       <h3>Readonly rating with a fractional value</h3>
       <input type="hidden" class="rating" data-readonly value="2.5"/>
       <h3>Customized heart rating</h3>
-      <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
+      <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart custom-heart" data-empty="glyphicon glyphicon-heart-empty custom-heart"/>
       <h3>Only fill selected</h3>
       <input type="hidden" class="rating" data-filled="glyphicon glyphicon-heart-empty" data-filled-selected="glyphicon glyphicon-heart" data-empty="glyphicon glyphicon-heart-empty"/>
       <h3>Handle events</h3>
