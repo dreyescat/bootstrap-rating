@@ -73,6 +73,18 @@
             position: 'absolute',
             overflow: 'hidden',
             left: 0,
+            // Overspecify right and left to 0 and let the container direction
+            // decide which one is going to take precedence according to the
+            // ltr/rtl direction.
+            // (https://developer.mozilla.org/en-US/docs/Web/CSS/right)
+            // When both the right CSS property and the left CSS property are
+            // defined, the position of the element is overspecified. In that
+            // case, the left value has precedence when the container is
+            // left-to-right (that is that the right computed value is set to
+            // -left), and the right value has precedence when the container is
+            // right-to-left (that is that the left computed value is set to
+            // -right).
+            right: 0,
             width: 0
           }).appendTo($symbol);
         $rating.append($symbol);
@@ -89,7 +101,14 @@
 
       var fractionalIndex = function (e) {
         var $symbol = $(e.currentTarget);
-        var x = (e.pageX || e.originalEvent.touches[0].pageX) - $symbol.offset().left;
+        // Calculate the distance from the mouse pointer to the origin of the
+        // symbol. We need to be careful with the CSS direction. If we are
+        // right-to-left then the symbol starts at the right. So we have to add
+        // the symbol width to the left offset to get the CSS rigth position.
+        var x = Math.abs((e.pageX || e.originalEvent.touches[0].pageX) -
+          (($symbol.css('direction') === 'rtl' && $symbol.width()) +
+          $symbol.offset().left));
+
         // NOTE: When the mouse pointer is close to the left side of the symbol
         // a negative x is returned. Probably some precision error in the
         // calculation.
