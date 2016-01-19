@@ -203,6 +203,10 @@
         return this.$input.val();
       }
       this._updateRate(value);
+    },
+    destroy: function () {
+      this.$input.prev().remove();
+      this.$input.removeData('rating');
     }
   };
 
