@@ -216,9 +216,11 @@
     this.each(function () {
       var $input = $(this);
       var rating = $input.data('rating');
-      if (!rating) {
-        $input.data('rating', (rating = new Rating(this, options)));
+      if (rating) {
+        $input.prev().remove();
+        $input.removeData('rating');
       }
+      $input.data('rating', (rating = new Rating(this, options)));
       // Underscore are used for private methods.
       if (typeof options === 'string' && options[0] !== '_') {
         result = rating[options].apply(rating, args);
