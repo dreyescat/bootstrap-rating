@@ -227,9 +227,9 @@
 
   // Plugin defaults.
   $.fn.rating.defaults = {
-    filled: 'glyphicon glyphicon-star',
+    filled: 'symbol symbol-filled',
     filledSelected: undefined,
-    empty: 'glyphicon glyphicon-star-empty',
+    empty: 'symbol symbol-empty',
     start: 0,
     stop: OFFSET,
     step: 1,

@@ -1,0 +1,6 @@
+* [jquery-rating](https://www.npmjs.com/package/jquery-rating)
+* [Transfer ownership of NPM package](https://github.com/slevithan/xregexp/issues/11)
+* [Publish jquery plugin](http://blog.npmjs.org/post/111475741445/publishing-your-jquery-plugin-to-npm-the-quick)
+* [Using jquery plugin](http://blog.npmjs.org/post/112064849860/using-jquery-plugins-with-npm)
+* [Working with scoped packages](https://docs.npmjs.com/getting-started/scoped-packages)
+* [bootstrap-datetimepicker](https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/package.json)
