@@ -222,7 +222,7 @@
         result = rating[options].apply(rating, args);
       }
     });
-    return result || this;
+    return result !== undefined ? result : this;
   };
 
   // Plugin defaults.
