@@ -43,6 +43,7 @@
       <input type="number" id="programmatically-value">
       <button type="button" id="programmatically-set">Set value</button>
       <button type="button" id="programmatically-get">Get value</button>
+      <button type="button" id="programmatically-reset">Reset value</button>
       <h3>Customize tooltips</h3>
       <input type="hidden" class="rating-tooltip"/>
       <h3>Set stop rate to 10 [1..10]</h3>
@@ -79,6 +80,9 @@
         });
         $('#programmatically-get').click(function () {
           alert($('#programmatically-rating').rating('rate'));
+        });
+        $('#programmatically-reset').click(function () {
+          $('#programmatically-rating').rating('rate', '');
         });
         $('.rating-tooltip').rating({
           extendSymbol: function (rate) {

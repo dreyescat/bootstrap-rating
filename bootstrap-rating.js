@@ -198,6 +198,9 @@
       if (this._contains(value)) {
         this._fillUntil(this._rateToIndex(value));
         this.$input.val(value);
+      } else if (rate === '') {
+        this._fillUntil(0);
+        this.$input.val('');
       }
     },
     rate: function (value) {
@@ -222,7 +225,7 @@
         result = rating[options].apply(rating, args);
       }
     });
-    return result || this;
+    return result !== undefined ? result : this;
   };
 
   // Plugin defaults.
