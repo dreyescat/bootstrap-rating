@@ -125,6 +125,8 @@
         .on('mousedown touchstart', '.rating-symbol', ifEnabled(function (e) {
           // Set input 'trigger' the change event.
           $input.val(rating._indexToRate(fractionalIndex(e))).change();
+
+          rating.options.afterRate(rating._indexToRate(fractionalIndex(e))); // thirdy
         }))
         .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
           var current = rating._roundToFraction(fractionalIndex(e));
@@ -239,6 +241,7 @@
     fractions: 1,
     scale: 3,
     extendSymbol: function (rate) {},
+    afterRate: function (rate) {}
   };
 
   $(function () {
