@@ -126,7 +126,7 @@
           // Set input 'trigger' the change event.
           $input.val(rating._indexToRate(fractionalIndex(e))).change();
 
-          rating.options.afterRate(); // thirdy
+          rating.options.afterRate(rating._indexToRate(fractionalIndex(e))); // thirdy
         }))
         .on('mousemove touchmove', '.rating-symbol', ifEnabled(function (e) {
           var current = rating._roundToFraction(fractionalIndex(e));
@@ -241,7 +241,7 @@
     fractions: 1,
     scale: 3,
     extendSymbol: function (rate) {},
-    afterRate: function () {}
+    afterRate: function (rate) {}
   };
 
   $(function () {
